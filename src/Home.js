@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import "./App.css";
+import castle from "../src/Images/castle.jpg";
+
 import { Link, withRouter } from "react-router-dom";
 
 class Home extends Component {
@@ -81,8 +83,7 @@ class Home extends Component {
               </li>
               <li class="nav-item">
                 <a class={classesLogOut} href="\mycart">
-                <span className="glyphicon glyphicon-shopping-cart"></span>
-                
+                  <span className="glyphicon glyphicon-shopping-cart"></span>
                   MyCart
                 </a>
               </li>
@@ -130,7 +131,9 @@ class Home extends Component {
           <div className="col-md-2 ">
             <div className="sidebarContent">Left Side Bar</div>
           </div>
-          <div className="col-md-8 sidebarContent">Main Content Area</div>
+          <div className="col-md-8 sidebarContent">
+            <img src={require("../src/Images/castle.jpg")}></img>
+          </div>
           <div className="col-md-2 ">
             <div className="sidebarContent">Right Side Bar</div>
           </div>

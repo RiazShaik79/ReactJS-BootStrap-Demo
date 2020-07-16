@@ -66,7 +66,9 @@ function About() {
               <h5>This web application is built using,</h5>
 
               <ol>
-                <li className="list-group-item">ReactJS, BootStrap (Web)</li>
+                <li className="list-group-item">
+                  ReactJS, Redux, BootStrap (Web)
+                </li>
                 <li className="list-group-item">
                   Springboot (Backend Applications - Microservices)
                 </li>

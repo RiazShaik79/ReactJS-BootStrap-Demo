@@ -18,6 +18,7 @@ export class ProductsForm extends Component {
       topics: [],
     },
     step: 1,
+    pageNo: 0,
   };
 
   constructor(props) {
@@ -45,11 +46,14 @@ export class ProductsForm extends Component {
       },
     };
 
-    axios.get("http://localhost:8080/topics").then((response) => {
-      this.setState({
-        products: response.data,
+    axios
+      .get("http://localhost:8080/topics/" + this.state.pageNo + "/6/id")
+      .then((response) => {
+        this.setState({
+          products: response.data,
+        });
+        console.log("products " + response.data);
       });
-    });
   }
 
   _refreshCart() {
@@ -71,20 +75,58 @@ export class ProductsForm extends Component {
       });
   }
 
-  //proceed to next step
-  nextStep = () => {
-    const { step } = this.state;
-    this.setState({
-      step: step + 1,
-    });
+  previousPage = () => {
+    const { pageNo } = this.state;
+    if (pageNo > 0) {
+      this.setState({
+        pageNo: pageNo - 1,
+      });
+    }
+    console.log("am inside refreshproducts ");
+    let config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + localStorage.getItem("userToken"),
+      },
+    };
+
+    axios
+      .get("http://localhost:8080/topics/" + (this.state.pageNo - 1) + "/6/id")
+      .then((response) => {
+        this.setState({
+          products: response.data,
+        });
+        console.log("products " + response.data);
+      });
+
+    //this._refreshProducts();
   };
 
-  //go back to previous step
-  prevStep = () => {
-    const { step } = this.state;
+  nextPage = () => {
+    const { pageNo } = this.state;
+
     this.setState({
-      step: step - 1,
+      pageNo: pageNo + 1,
     });
+
+    console.log("am inside refreshproducts ");
+    let config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + localStorage.getItem("userToken"),
+      },
+    };
+
+    axios
+      .get("http://localhost:8080/topics/" + (this.state.pageNo + 1) + "/6/id")
+      .then((response) => {
+        this.setState({
+          products: response.data,
+        });
+        console.log("products " + response.data);
+      });
+
+    //this._refreshProducts();
   };
 
   handleAddtoCart(product) {
@@ -142,24 +184,20 @@ export class ProductsForm extends Component {
   }
 
   render() {
-    const { step } = this.state;
-    const { onReset, counters, onDelete, onIncrement } = this.props;
-    switch (step) {
-      case 1:
-        return (
-          <ProductsDetails
-            username={localStorage.getItem("userName")}
-            token={localStorage.getItem("userToken")}
-            nextStep={this.nextStep}
-            handleChange={this.handleChange}
-            products={this.state.products}
-            mycart={this.state.mycart}
-            handleSavetoCart={this.handleSavetoCart}
-            handleAddtoCart={this.handleAddtoCart}
-            userLoggedIn={this.props.userLoggedIn}
-          />
-        );
-    }
+    return (
+      <ProductsDetails
+        username={localStorage.getItem("userName")}
+        token={localStorage.getItem("userToken")}
+        previousPage={this.previousPage}
+        nextPage={this.nextPage}
+        handleChange={this.handleChange}
+        products={this.state.products}
+        mycart={this.state.mycart}
+        handleSavetoCart={this.handleSavetoCart}
+        handleAddtoCart={this.handleAddtoCart}
+        userLoggedIn={this.props.userLoggedIn}
+      />
+    );
   }
 }
 

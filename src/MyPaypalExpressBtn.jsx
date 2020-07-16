@@ -1,6 +1,7 @@
 import React from "react";
 import PaypalExpressBtn from "react-paypal-express-checkout";
 import axios from "axios";
+import { PayPalButton } from "react-paypal-button-v2";
 
 export default class MyPaypalExpressBtn extends React.Component {
   state = {
@@ -8,6 +9,7 @@ export default class MyPaypalExpressBtn extends React.Component {
       orderId: "",
       topics: [],
       totalAmount: 0,
+      paymentOrderId: "",
     },
   };
   constructor(props) {
@@ -18,6 +20,7 @@ export default class MyPaypalExpressBtn extends React.Component {
   createOrder() {
     this.setState({ totalAmount: this.props.totalAmount });
     this.setState({ topics: this.props.products });
+
     console.log("topics " + this.props.products);
     let config = {
       headers: {
@@ -30,15 +33,30 @@ export default class MyPaypalExpressBtn extends React.Component {
       .post("http://localhost:8080/orders", this.state, config)
       .then((response) => {
         console.log(response.data);
-        this.props.nextStep();
+         this.props.nextStep();
       });
   }
 
   render() {
+    const onSuccess1 = (details, data) => {
+      console.log("details " + JSON.stringify(details));
+      console.log("data " + JSON.stringify(data));
+      alert("Transaction completed by " + details.payer.name.given_name);
+
+      // OPTIONAL: Call your server to save the transaction
+      return fetch("/paypal-transaction-complete", {
+        method: "post",
+        body: JSON.stringify({
+          orderID: data.orderID,
+        }),
+      });
+    };
     const onSuccess = (payment) => {
       console.log("Your payment was succeeded!", payment);
-      this.createOrder();
+      console.log("Order Id: " + payment);
+      this.createOrder(payment.orderId);
     };
+
     const onCancel = (data) => {
       // User pressed "cancel" or close Paypal's popup!
       console.log("You have cancelled the payment!", data);
@@ -56,15 +74,17 @@ export default class MyPaypalExpressBtn extends React.Component {
     };
 
     return (
-      <PaypalExpressBtn
-        client={client}
-        currency={"GBP"}
-        total={this.props.totalAmount}
-        intent={"capture"}
-        onError={onError}
-        onSuccess={onSuccess}
-        onCancel={onCancel}
-      />
+      <div>
+        <PaypalExpressBtn
+          client={client}
+          currency={"GBP"}
+          total={this.props.totalAmount}
+          intent={"sale"}
+          onError={onError}
+          onSuccess={onSuccess}
+          onCancel={onCancel}
+        />
+      </div>
     );
   }
 }

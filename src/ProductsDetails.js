@@ -4,6 +4,7 @@ import axios from "axios";
 import Counters from "./pages/counters";
 import Counter from "./pages/counter";
 import ModelButton from "./pages/ModelButton";
+import StarRating from "./pages/StarRating";
 
 class ProductsDetails extends Component {
   state = {
@@ -26,7 +27,7 @@ class ProductsDetails extends Component {
               </a>
               <br />
               <br />
-              <b> £ {product.unitPrice}</b>
+              Price<b> £{product.unitPrice}</b>
               <br />
               <button
                 class="btn btn-outline-success btn-sm btn-block my-2"
@@ -36,6 +37,11 @@ class ProductsDetails extends Component {
                 Add to Cart
               </button>{" "}
               <ModelButton key={product.id} product={product} />
+              <StarRating
+                currentRating={product.rating}
+                numberOfStars="5"
+                disabled="false"
+              />
             </div>
           </div>
         </div>
@@ -128,6 +134,25 @@ class ProductsDetails extends Component {
           </div>
           <div className="col-md-10 ">
             <div className="row">{products}</div>
+            <div className="row">
+              <div className="col-md-12 offset-4">
+                <br />
+                <button
+                  className="btn btn-outline-secondary"
+                  onClick={this.props.previousPage}
+                >
+                  <span className="glyphicon glyphicon-chevron-left "></span>
+                  Previous
+                </button>{" "}
+                <button
+                  className="btn btn-outline-secondary"
+                  onClick={this.props.nextPage}
+                >
+                  Next{" "}
+                  <span className="glyphicon glyphicon-chevron-right "></span>{" "}
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
