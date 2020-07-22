@@ -3,11 +3,23 @@ import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import AppBar from "material-ui/AppBar";
 import { List, ListItem } from "material-ui/List";
 import RaisedButton from "material-ui/RaisedButton";
+import axios from "axios";
 
 export class Confrim extends Component {
+  constructor(props) {
+    super(props);
+  }
+
   continue = (e) => {
     e.preventDefault();
     //process form i.e. send your data to api etc.
+
+    console.log("user details ", this.props.userdetails);
+    axios
+      .post("http://localhost:8080/users", this.props.userdetails)
+      .then((response) => {
+        console.log(response.data);
+      });
     this.props.nextStep();
   };
 
@@ -17,9 +29,6 @@ export class Confrim extends Component {
   };
 
   render() {
-    const {
-      values: { firstName, lastName, email, phone, occupation, city, bio },
-    } = this.props;
     return (
       <div className="container-fluid">
         <div className="row">
@@ -79,18 +88,55 @@ export class Confrim extends Component {
                 <List>
                   <ListItem
                     primaryText="First Name"
-                    secondaryText={firstName}
+                    secondaryText={this.props.userdetails.firstName}
                   />
-                  <ListItem primaryText="Last Name" secondaryText={lastName} />
-                  <ListItem primaryText="Email" secondaryText={email} />
-                  <ListItem primaryText="Phone" secondaryText={phone} />
+                  <ListItem
+                    primaryText="Last Name"
+                    secondaryText={this.props.userdetails.lastName}
+                  />
+                  <ListItem
+                    primaryText="Email"
+                    secondaryText={this.props.userdetails.email}
+                  />
+                  <ListItem
+                    primaryText="Phone"
+                    secondaryText={this.props.userdetails.phone}
+                  />
                   <ListItem
                     primaryText="Occupation"
-                    secondaryText={occupation}
+                    secondaryText={this.props.userdetails.occupation}
                   />
-                  <ListItem primaryText="City" secondaryText={city} />
-                  <ListItem primaryText="Date of Birth" secondaryText={bio} />
+                  <ListItem
+                    primaryText="Date of Birth"
+                    secondaryText={this.props.userdetails.dob}
+                  />
+                  <ListItem primaryText="Address" secondaryText={""} />
+                  <ListItem
+                    primaryText="Street"
+                    secondaryText={
+                      this.props.userdetails.address_data.address.street
+                    }
+                  />
+                  <ListItem
+                    primaryText="City"
+                    secondaryText={
+                      this.props.userdetails.address_data.address.city
+                    }
+                  />
+                  <ListItem
+                    primaryText="Postcode"
+                    secondaryText={
+                      this.props.userdetails.address_data.address.postalCode
+                    }
+                  />
                 </List>
+                <ListItem
+                  primaryText="Country"
+                  secondaryText={
+                    this.props.userdetails.address_data.address.country
+                  }
+                />
+
                 <br />
                 <RaisedButton
                   label="Confrim & Continue"

@@ -33,7 +33,7 @@ export default class MyPaypalExpressBtn extends React.Component {
       .post("http://localhost:8080/orders", this.state, config)
       .then((response) => {
         console.log(response.data);
-         this.props.nextStep();
+        this.props.nextStep();
       });
   }
 
@@ -53,8 +53,7 @@ export default class MyPaypalExpressBtn extends React.Component {
     };
     const onSuccess = (payment) => {
       console.log("Your payment was succeeded!", payment);
-      console.log("Order Id: " + payment);
-      this.createOrder(payment.orderId);
+      this.createOrder();
     };
 
     const onCancel = (data) => {

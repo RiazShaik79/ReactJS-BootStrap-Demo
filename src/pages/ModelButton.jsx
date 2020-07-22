@@ -14,20 +14,8 @@ class ModelButton extends Component {
   }
 
   getCustomerProductFeedbacks() {
-    console.log("Iam in customer feedback function" + this.props.product.name);
-
-    let config = {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + localStorage.getItem("userToken"),
-      },
-    };
-
     axios
-      .get(
-        "http://localhost:8080/customerFeedbacks/" + this.props.product.name,
-        config
-      )
+      .get("http://localhost:8080/customerFeedbacks/" + this.props.product.name)
       .then((response) => {
         this.setState({ feedbacks: response.data });
         console.log("feedbacks " + JSON.stringify(this.state.feedbacks));

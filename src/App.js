@@ -41,8 +41,7 @@ class App extends Component {
     console.log("Im from handlelogged in");
     this.setState({ token: data });
     this.setState({ username: username });
-    console.log("username : " + this.state.username);
-    console.log("Token : " + this.state.token);
+    
 
     localStorage.setItem("userName", this.state.username);
     localStorage.setItem("userLoggedInState", this.state.userLoggedIn);

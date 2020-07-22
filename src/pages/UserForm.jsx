@@ -3,6 +3,11 @@ import FormUserDetails from "./FormUserDetails";
 import FormPersonalDetails from "./FormPersonalDetails";
 import Success from "./Success";
 import Confirm from "./Confirm";
+import axios from "axios";
+import AddressForm1 from "../AddressForm1";
+
+const APP_ID_HERE = "u2pf1yvgQxEfSjOMX7jZ";
+const APP_CODE_HERE = "E53uzTEjWPtNAGW9uqVMxg";
 
 export class UserForm extends Component {
   state = {
@@ -15,9 +20,191 @@ export class UserForm extends Component {
     email: "",
     phone: "",
     occupation: "",
-    city: "",
-    bio: "",
+    dob: "",
+    address_data: {
+      address: {
+        street: "",
+        city: "",
+        state: "",
+        postalCode: "",
+        country: "",
+      },
+      query: "",
+      locationId: "",
+      isChecked: false,
+      coords: {},
+    },
   };
+
+  constructor(props) {
+    super(props);
+
+    this.state.address_data = this.getInitialState();
+    // User has entered something in the address bar
+    this.onQuery = this.onQuery.bind(this);
+    // User has entered something in an address field
+    this.onAddressChange = this.onAddressChange.bind(this);
+    // User has clicked the check button
+    this.onCheck = this.onCheck.bind(this);
+    // User has clicked the clear button
+    this.onClear = this.onClear.bind(this);
+    this.alert = this.alert.bind(this);
+    this.prevStep = this.prevStep.bind(this);
+    this.nextStep = this.nextStep.bind(this);
+  }
+
+  onQuery(evt) {
+    const query = evt.target.value;
+    console.log("Iam in onQuery function");
+
+    if (!query.length > 0) {
+      this.setState({ address_data: this.getInitialState() });
+      return;
+    }
+
+    axios
+      .get("https://autocomplete.geocoder.api.here.com/6.2/suggest.json", {
+        params: {
+          app_id: APP_ID_HERE,
+          app_code: APP_CODE_HERE,
+          query: query,
+          maxresults: 1,
+        },
+      })
+      .then((response) => {
+        if (response.data.suggestions.length > 0) {
+          const id = response.data.suggestions[0].locationId;
+          const address = response.data.suggestions[0].address;
+
+          this.setState({
+            address_data: {
+              address: address,
+              query: query,
+              locationId: id,
+            },
+          });
+        } else {
+          const state = this.getInitialState();
+          this.setState({ address_data: state });
+        }
+      });
+  }
+
+  getInitialState() {
+    return {
+      address: {
+        street: "",
+        city: "",
+        state: "",
+        postalCode: "",
+        country: "",
+      },
+      query: "",
+      locationId: "",
+      isChecked: false,
+      coords: {},
+    };
+  }
+
+  onClear(evt) {
+    const state = this.getInitialState();
+    this.setState({ address_data: this.getInitialState() });
+  }
+
+  onAddressChange(evt) {
+    const id = evt.target.id;
+    const val = evt.target.value;
+
+    let state = this.state.address_data;
+    state.address[id] = val;
+    this.setState({ address_data: state });
+  }
+
+  onCheck(evt) {
+    let params = {
+      app_id: APP_ID_HERE,
+      app_code: APP_CODE_HERE,
+    };
+
+    if (this.state.address_data.locationId.length > 0) {
+      params["locationId"] = this.state.address_data.locationId;
+    } else {
+      params["searchtext"] =
+        this.state.address_data.address.street +
+        this.state.address_data.address.city +
+        this.state.address_data.address.state +
+        this.state.address_data.address.postalCode +
+        this.state.address_data.address.country;
+    }
+    console.log("address data " + this.state.address_data);
+    axios
+      .get("https://geocoder.api.here.com/6.2/geocode.json", { params: params })
+      .then((response) => {
+        const view = response.data.Response.View;
+        if (view.length > 0 && view[0].Result.length > 0) {
+          const location = view[0].Result[0].Location;
+
+          this.setState({
+            address_data: {
+              isChecked: "true",
+              locationId: "",
+              query: location.Address.Label,
+              address: {
+                street:
+                  location.Address.HouseNumber + " " + location.Address.Street,
+                city: location.Address.City,
+                state: location.Address.State,
+                postalCode: location.Address.PostalCode,
+                country: location.Address.Country,
+              },
+              coords: {
+                lat: location.DisplayPosition.Latitude,
+                lon: location.DisplayPosition.Longitude,
+              },
+            },
+          });
+        } else {
+          this.setState({
+            address_data: {
+              address: this.state.address_data.address,
+              isChecked: true,
+              coords: this.state.address_data.coords,
+            },
+          });
+        }
+      })
+      .catch((error) => {
+        console.log("caught failed query");
+        this.setState({
+          address_data: {
+            address: this.state.address_data.address,
+            isChecked: true,
+            coords: null,
+          },
+        });
+      });
+  }
+
+  alert() {
+    if (!this.state.address_data.isChecked) {
+      return;
+    }
+
+    if (this.state.address_data.coords === null) {
+      return (
+        <div className="alert alert-warning" role="alert">
+          <b>Invalid.</b> The address is not recognized.
+        </div>
+      );
+    } else {
+      return (
+        <div className="alert alert-success" role="alert">
+          <b>Valid Address.</b> Location is {this.state.address_data.coords.lat}
+          , {this.state.address_data.coords.lon}.
+        </div>
+      );
+    }
+  }
 
   //proceed to next step
   nextStep = () => {
@@ -46,22 +233,27 @@ export class UserForm extends Component {
   render() {
     const { step } = this.state;
     const {
+      username,
+      password,
+      cpassword,
       firstName,
       lastName,
       email,
       phone,
       occupation,
-      city,
-      bio,
+      dob,
     } = this.state;
+
     const values = {
+      username,
+      password,
+      cpassword,
       firstName,
       lastName,
       email,
       phone,
       occupation,
-      city,
-      bio,
+      dob,
     };
 
     switch (step) {
@@ -75,6 +267,19 @@ export class UserForm extends Component {
         );
       case 2:
         return (
+          <AddressForm1
+            alert={this.alert}
+            address_data={this.state.address_data}
+            onAddressChange={this.onAddressChange}
+            onClear={this.onClear}
+            onCheck={this.onCheck}
+            onQuery={this.onQuery}
+            nextStep={this.nextStep}
+            prevStep={this.prevStep}
+          />
+        );
+      case 3:
+        return (
           <FormPersonalDetails
             nextStep={this.nextStep}
             prevStep={this.prevStep}
@@ -82,15 +287,15 @@ export class UserForm extends Component {
             values={values}
           />
         );
-      case 3:
+      case 4:
         return (
           <Confirm
             nextStep={this.nextStep}
             prevStep={this.prevStep}
-            values={values}
+            userdetails={this.state}
           />
         );
-      case 4:
+      case 5:
         return <Success />;
     }
   }

@@ -14,7 +14,7 @@ export class ProductsForm extends Component {
   state = {
     products: [],
     mycart: {
-      username: "rshaikb",
+      username: "",
       topics: [],
     },
     step: 1,
@@ -27,18 +27,16 @@ export class ProductsForm extends Component {
     this.handleAddtoCart = this.handleAddtoCart.bind(this);
     this.handleSavetoCart = this.handleSavetoCart.bind(this);
     this._refreshCart = this._refreshCart.bind(this);
+
+    this.state.mycart.username = localStorage.getItem("userName");
   }
 
   componentWillMount() {
     this._refreshProducts();
     this._refreshCart();
-    console.log("user state " + this.props.userLoggedIn);
   }
 
   _refreshProducts() {
-    console.log("Token Received: " + this.props.token);
-
-    console.log("am inside refreshproducts ");
     let config = {
       headers: {
         "Content-Type": "application/json",
@@ -57,9 +55,6 @@ export class ProductsForm extends Component {
   }
 
   _refreshCart() {
-    console.log("Token Received: " + this.props.token);
-
-    console.log("am inside refresh Cart ");
     let config = {
       headers: {
         "Content-Type": "application/json",
@@ -68,10 +63,9 @@ export class ProductsForm extends Component {
     };
 
     axios
-      .get("http://localhost:8080/mycart/rshaikb", config)
+      .post("http://localhost:8080/mycart/get", this.state.mycart, config)
       .then((response) => {
         this.setState({ mycart: response.data });
-        console.log(this.state.mycart.topics);
       });
   }
 
@@ -96,7 +90,6 @@ export class ProductsForm extends Component {
         this.setState({
           products: response.data,
         });
-        console.log("products " + response.data);
       });
 
     //this._refreshProducts();
@@ -147,7 +140,9 @@ export class ProductsForm extends Component {
       topics.push(product);
     }
 
-    this.setState({ mycart: { username: "rshaikb", topics } });
+    this.setState({
+      mycart: { username: localStorage.getItem("userName"), topics },
+    });
 
     /* let config = {
       headers: {
@@ -177,7 +172,7 @@ export class ProductsForm extends Component {
     };
 
     axios
-      .put("http://localhost:8080/mycart/rshaikb", this.state.mycart, config)
+      .put("http://localhost:8080/mycart/", this.state.mycart, config)
       .then((response) => {
         console.log(response.data);
       });

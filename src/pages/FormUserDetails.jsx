@@ -67,7 +67,7 @@ export class FormUserDetails extends Component {
               <input
                 type="text"
                 className="form-control"
-                placeholder="Enter Username"
+                placeholder="Enter Username or Email"
                 flotingLabelText="username"
                 onChange={handleChange("username")}
                 defaultValue={values.username}

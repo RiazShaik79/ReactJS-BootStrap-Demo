@@ -12,7 +12,7 @@ import MyCartDetails from "../MyCartDetails";
 export class MyCartForm extends Component {
   state = {
     mycart: {
-      username: "rshaikb",
+      username: "",
       topics: [],
     },
     step: 1,
@@ -25,6 +25,7 @@ export class MyCartForm extends Component {
     this.handleDecrement = this.handleDecrement.bind(this);
     this.handleReset = this.handleReset.bind(this);
     this.handleSavetoCart = this.handleSavetoCart.bind(this);
+    this.state.mycart.username = localStorage.getItem("userName");
   }
 
   componentWillMount() {
@@ -43,7 +44,7 @@ export class MyCartForm extends Component {
     };
 
     axios
-      .get("http://localhost:8080/mycart/rshaikb", config)
+      .post("http://localhost:8080/mycart/get", this.state.mycart, config)
       .then((response) => {
         this.setState({ mycart: response.data });
         console.log(this.state.mycart.topics);
@@ -55,7 +56,9 @@ export class MyCartForm extends Component {
       c.value = 0;
       return c;
     });
-    this.setState({ mycart: { username: "rshaikb", topics } });
+    this.setState({
+      mycart: { username: localStorage.getItem("userName"), topics },
+    });
     this.handleSavetoCart();
   };
 
@@ -65,7 +68,9 @@ export class MyCartForm extends Component {
     const index = topics.indexOf(product);
     topics[index] = { ...product };
     topics[index].value++;
-    this.setState({ mycart: { username: "rshaikb", topics } });
+    this.setState({
+      mycart: { username: localStorage.getItem("userName"), topics },
+    });
   };
 
   handleDecrement = (product) => {
@@ -76,7 +81,9 @@ export class MyCartForm extends Component {
     if (topics[index].value <= 0) {
       topics[index].value = 0;
     }
-    this.setState({ mycart: { username: "rshaikb", topics } });
+    this.setState({
+      mycart: { username: localStorage.getItem("userName"), topics },
+    });
   };
 
   //proceed to next step
@@ -104,7 +111,7 @@ export class MyCartForm extends Component {
     };
 
     axios
-      .put("http://localhost:8080/mycart/rshaikb", this.state.mycart, config)
+      .put("http://localhost:8080/mycart", this.state.mycart, config)
       .then((response) => {
         console.log(response.data);
       });

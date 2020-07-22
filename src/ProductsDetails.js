@@ -47,7 +47,13 @@ class ProductsDetails extends Component {
         </div>
       );
     });
+    let classesLogOut = "nav-link disabled";
+    let classesLogIn = "nav-link";
 
+    if (localStorage.getItem("userLoggedInState")) {
+      classesLogOut = "nav-link";
+      classesLogIn = "nav-link disabled";
+    }
     return (
       <div className="container-fluid">
         <div className="row">
@@ -96,7 +102,7 @@ class ProductsDetails extends Component {
               </li>
 
               <li class="nav-item">
-                <a class="nav-link" href="\mycart">
+                <a class={classesLogOut} href="\mycart">
                   <span className="glyphicon glyphicon-shopping-cart"></span>
                   MyCart
                 </a>

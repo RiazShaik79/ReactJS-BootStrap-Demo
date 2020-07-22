@@ -12,9 +12,9 @@ class Home extends Component {
   render() {
     let classesLogOut = "nav-link disabled";
     let classesLogIn = "nav-link";
-    console.log("userstate : " + localStorage.getItem("userLoggedInState"));
+
     if (localStorage.getItem("userLoggedInState")) {
-      console.log("Im in home app");
+      
       classesLogOut = "nav-link";
       classesLogIn = "nav-link disabled";
     }

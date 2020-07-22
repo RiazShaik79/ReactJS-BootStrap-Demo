@@ -1,7 +1,12 @@
 import React, { Component } from "react";
-import AddressForm from "../AddressForm";
+import AddressSuggest from "./AddressSuggest";
+import AddressInput from "./AddressInput";
 
-export class FormPersonalDetails extends Component {
+class AddressForm1 extends Component {
+  constructor(props) {
+    super(props);
+  }
+
   continue = (e) => {
     e.preventDefault();
     this.props.nextStep();
@@ -12,8 +17,19 @@ export class FormPersonalDetails extends Component {
     this.props.prevStep();
   };
 
+  onCheck = (e) => {
+    e.preventDefault();
+    this.props.onCheck();
+  };
+
+  onClear = (e) => {
+    e.preventDefault();
+    this.props.onClear();
+  };
+
   render() {
-    const { values, handleChange } = this.props;
+    let result = this.props.alert();
+    console.log("reRending address form");
     return (
       <div className="container-fluid">
         <div className="row">
@@ -70,30 +86,42 @@ export class FormPersonalDetails extends Component {
             <form className="form-group">
               <h4 className="textColorBlack">Enter Personal Details</h4>
               <br />
-              <input
-                type="text"
-                className="form-control"
-                placeholder="Enter your Occupation"
-                flotingLabelText="Occupation"
-                onChange={handleChange("occupation")}
-                defaultValue={values.occupation}
-              />
-              <br />
-              <input
-                type="text"
-                className="form-control"
-                placeholder="Enter your Date of Birth (dob in yyyy-mm-dd format)"
-                flotingLabelText="Bio"
-                onChange={handleChange("dob")}
-                defaultValue={values.dob}
-              />
-              <br />
-              <button className="btn btn-secondary" onClick={this.continue}>
-                Continue
-              </button>{" "}
-              <button className="btn btn-secondary" onClick={this.back}>
-                Back
-              </button>
+              <div className="container textColorBlack">
+                <AddressSuggest
+                  query={this.props.address_data.query}
+                  onChange={this.props.onQuery}
+                />
+                <AddressInput
+                  street={this.props.address_data.address.street}
+                  city={this.props.address_data.address.city}
+                  state={this.props.address_data.address.state}
+                  postalCode={this.props.address_data.address.postalCode}
+                  country={this.props.address_data.address.country}
+                  onChange={this.props.onAddressChange}
+                />
+                {result}
+                <button
+                  type="submit"
+                  className="btn btn-primary my-2"
+                  onClick={this.onCheck}
+                >
+                  Check
+                </button>{" "}
+                <button
+                  type="submit"
+                  className="btn btn-outline-secondary my-2"
+                  onClick={this.onClear}
+                >
+                  Clear
+                </button>
+                <br />
+                <button className="btn btn-secondary" onClick={this.continue}>
+                  Continue
+                </button>{" "}
+                <button className="btn btn-secondary" onClick={this.back}>
+                  Back
+                </button>
+              </div>
             </form>
           </div>
           <div className="col-md-2 ">
@@ -105,10 +133,4 @@ export class FormPersonalDetails extends Component {
   }
 }
 
-export default FormPersonalDetails;
-
-const styles = {
-  button: {
-    margin: 15,
-  },
-};
+export default AddressForm1;
