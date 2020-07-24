@@ -22,6 +22,7 @@ import MyCart from "./pages/MyCartForm";
 import ProductsForm from "./pages/ProductsForm";
 import MyCartForm from "./pages/MyCartForm";
 //import MyApp from "./MyPaypalExpressBtn.jsx";
+import EditUserForm from "./pages/EditUserForm";
 
 class App extends Component {
   state = {
@@ -41,7 +42,6 @@ class App extends Component {
     console.log("Im from handlelogged in");
     this.setState({ token: data });
     this.setState({ username: username });
-    
 
     localStorage.setItem("userName", this.state.username);
     localStorage.setItem("userLoggedInState", this.state.userLoggedIn);
@@ -65,7 +65,7 @@ class App extends Component {
   }
 
   render() {
-    if (this.state.userLoggedIn) {
+     if (this.state.userLoggedIn) {
       console.log("im from app1 js redirect");
       return (
         <div className="App1">
@@ -78,6 +78,7 @@ class App extends Component {
                 counter={this.state.counter}
                 username={localStorage.getItem("userName")}
                 handleLogout={this.handleLogout}
+                userLoggedIn={localStorage.getItem("userLoggedInState")}
               />
             )}
           />
@@ -97,6 +98,8 @@ class App extends Component {
                     {...props}
                     username={localStorage.getItem("userName")}
                     handleLogout={this.handleLogout}
+                    userLoggedIn={localStorage.getItem("userLoggedInState")}
+                    userhandleLogout={this.handleLogout}
                   />
                 )}
               />
@@ -123,9 +126,11 @@ class App extends Component {
                     username={localStorage.getItem("userName")}
                     token={localStorage.getItem("userToken")}
                     userLoggedIn={localStorage.getItem("userLoggedInState")}
+                    handleLogout={this.handleLogout}
                   />
                 )}
               />
+              <Route path="/edituser" component={EditUserForm}></Route>
               <Route
                 path="/mycart"
                 render={(props) => (
@@ -134,6 +139,7 @@ class App extends Component {
                     username={localStorage.getItem("userName")}
                     token={localStorage.getItem("userToken")}
                     userLoggedIn={localStorage.getItem("userLoggedInState")}
+                    handleLogout={this.handleLogout}
                   />
                 )}
               />
@@ -145,6 +151,8 @@ class App extends Component {
                     {...props}
                     username={localStorage.getItem("userName")}
                     token={localStorage.getItem("userToken")}
+                    userLoggedIn={localStorage.getItem("userLoggedInState")}
+                    handleLogout={this.handleLogout}
                   />
                 )}
               />

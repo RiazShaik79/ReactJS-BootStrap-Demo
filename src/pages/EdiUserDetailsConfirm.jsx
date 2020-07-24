@@ -5,7 +5,7 @@ import { List, ListItem } from "material-ui/List";
 import RaisedButton from "material-ui/RaisedButton";
 import axios from "axios";
 
-export class Confrim extends Component {
+export class EdiUserDetailsConfirm extends Component {
   constructor(props) {
     super(props);
   }
@@ -16,7 +16,7 @@ export class Confrim extends Component {
 
     console.log("user details ", this.props.userdetails);
     axios
-      .post("http://localhost:8080/users", this.props.userdetails)
+      .put("http://localhost:8080/users", this.props.userdetails)
       .then((response) => {
         console.log(response.data);
       });
@@ -33,7 +33,7 @@ export class Confrim extends Component {
       <div className="container-fluid">
         <div className="row">
           <div className="col-md-12 topbarContent">
-            <h1>This is User Registration Page</h1>
+            <h1>This is Edit User Page</h1>
           </div>
         </div>
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -162,7 +162,7 @@ export class Confrim extends Component {
   }
 }
 
-export default Confrim;
+export default EdiUserDetailsConfirm;
 
 const styles = {
   button: {

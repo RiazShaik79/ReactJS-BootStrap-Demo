@@ -1,15 +1,17 @@
 import React, { Component } from "react";
-import FormUserDetails from "./FormUserDetails";
-import FormPersonalDetails from "./FormPersonalDetails";
+import EditFormUserDetails from "./EditFormUserDetails";
+import EditFormPersonalDetails from "./EditFormPersonalDetails";
 import Success from "./Success";
 import Confirm from "./Confirm";
 import axios from "axios";
-import AddressForm1 from "../AddressForm1";
+import EditAddressForm1 from "../EditAddressForm1";
+import EditUserDetailsSuccess from "./EditUserDetailsSuccess";
+import EdiUserDetailsConfirm from "./EdiUserDetailsConfirm";
 
 const APP_ID_HERE = "u2pf1yvgQxEfSjOMX7jZ";
 const APP_CODE_HERE = "E53uzTEjWPtNAGW9uqVMxg";
 
-export class UserForm extends Component {
+export class EditUserForm extends Component {
   state = {
     step: 1,
     username: "",
@@ -36,6 +38,10 @@ export class UserForm extends Component {
     },
   };
 
+  componentDidMount() {
+    this.refreshState();
+  }
+
   constructor(props) {
     super(props);
 
@@ -53,6 +59,39 @@ export class UserForm extends Component {
     this.nextStep = this.nextStep.bind(this);
   }
 
+  refreshState() {
+    let config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + localStorage.getItem("userToken"),
+      },
+    };
+
+    const user = {
+      username: localStorage.getItem("userName"),
+    };
+
+    console.log("user ", user);
+
+    axios
+      .post("http://localhost:8080/users/get", user, config)
+      .then((response) => {
+        this.setState({
+          ...this.state.step,
+          firstName: response.data.firstName,
+          lastName: response.data.lastName,
+          username: response.data.username,
+          password: response.data.password,
+          cpassword: response.data.cpassword,
+          email: response.data.email,
+          phone: response.data.phone,
+          occupation: response.data.occupation,
+          dob: response.data.dob,
+          address_data: response.data.address_data,
+        });
+        console.log("response ", JSON.stringify(this.state));
+      });
+  }
   onQuery(evt) {
     const query = evt.target.value;
     console.log("Iam in onQuery function");
@@ -259,7 +298,7 @@ export class UserForm extends Component {
     switch (step) {
       case 1:
         return (
-          <FormUserDetails
+          <EditFormUserDetails
             nextStep={this.nextStep}
             handleChange={this.handleChange}
             values={values}
@@ -269,7 +308,7 @@ export class UserForm extends Component {
         );
       case 2:
         return (
-          <AddressForm1
+          <EditAddressForm1
             alert={this.alert}
             address_data={this.state.address_data}
             onAddressChange={this.onAddressChange}
@@ -284,7 +323,7 @@ export class UserForm extends Component {
         );
       case 3:
         return (
-          <FormPersonalDetails
+          <EditFormPersonalDetails
             nextStep={this.nextStep}
             prevStep={this.prevStep}
             handleChange={this.handleChange}
@@ -295,7 +334,7 @@ export class UserForm extends Component {
         );
       case 4:
         return (
-          <Confirm
+          <EdiUserDetailsConfirm
             nextStep={this.nextStep}
             prevStep={this.prevStep}
             userdetails={this.state}
@@ -305,7 +344,7 @@ export class UserForm extends Component {
         );
       case 5:
         return (
-          <Success
+          <EditUserDetailsSuccess
             userLoggedIn={this.props.userLoggedIn}
             handleLogout={this.props.handleLogout}
           />
@@ -314,4 +353,4 @@ export class UserForm extends Component {
   }
 }
 
-export default UserForm;
+export default EditUserForm;

@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import "./App.css";
 import castle from "../src/Images/castle.jpg";
+import UserButton from "./UserButton";
 
 import { Link, withRouter } from "react-router-dom";
 
@@ -14,7 +15,6 @@ class Home extends Component {
     let classesLogIn = "nav-link";
 
     if (localStorage.getItem("userLoggedInState")) {
-      
       classesLogOut = "nav-link";
       classesLogIn = "nav-link disabled";
     }
@@ -32,11 +32,10 @@ class Home extends Component {
           </div>
           <div className="col-md-2 topbarContent">
             <br />
-            <br />
-            <h6>
-              <span className="glyphicon glyphicon-user "></span>{" "}
-              {this.props.username}
-            </h6>
+            <UserButton
+              handleLogout={this.props.handleLogout}
+              userLoggedIn={this.props.userLoggedIn}
+            />
           </div>
         </div>
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -96,15 +95,6 @@ class Home extends Component {
             </ul>
             <form class="form-inline my-2 my-lg-0">
               <ul class="navbar-nav mr-auto">
-                <li class="nav-item ">
-                  <a
-                    className={classesLogOut}
-                    href="\"
-                    onClick={this.props.handleLogout}
-                  >
-                    Logout
-                  </a>
-                </li>
                 <li class="nav-item ">
                   <a className={classesLogIn} href="\sign-in">
                     Register/Sign-in

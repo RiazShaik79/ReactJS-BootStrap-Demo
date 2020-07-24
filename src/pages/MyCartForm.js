@@ -133,6 +133,7 @@ export class MyCartForm extends Component {
             handleReset={this.handleReset}
             handleSavetoCart={this.handleSavetoCart}
             userLoggedIn={this.props.userLoggedIn}
+            handleLogout={this.props.handleLogout}
           />
         );
       case 2:
@@ -147,10 +148,18 @@ export class MyCartForm extends Component {
             handleDecrement={this.handleDecrement}
             handleReset={this.handleReset}
             handleSave={this.handleSave}
+            userLoggedIn={this.props.userLoggedIn}
+            handleLogout={this.props.handleLogout}
           />
         );
       case 3:
-        return <OrderSuccess handleReset={this.handleReset} />;
+        return (
+          <OrderSuccess
+            handleReset={this.handleReset}
+            userLoggedIn={this.props.userLoggedIn}
+            handleLogout={this.props.handleLogout}
+          />
+        );
     }
   }
 }

@@ -32,7 +32,7 @@ export class OrdersForm extends Component {
   _refreshOrders() {
     console.log("Token Received: " + this.props.token);
 
-    console.log("am inside refreshorders ");
+    console.log("am inside refreshorders");
     let config = {
       headers: {
         "Content-Type": "application/json",
@@ -41,7 +41,6 @@ export class OrdersForm extends Component {
     };
 
     axios.get("http://localhost:8080/orders", config).then((response) => {
-      console.log("orders " + JSON.stringify(response.data));
       this.setState({
         orders: response.data,
       });
@@ -108,6 +107,8 @@ export class OrdersForm extends Component {
             trackPackageStep={this.trackPackageStep}
             orders={this.state.orders}
             handleSave={this.handleSave}
+            userLoggedIn={this.props.userLoggedIn}
+            handleLogout={this.props.handleLogout}
           />
         );
       case 2:
@@ -116,6 +117,8 @@ export class OrdersForm extends Component {
             username={localStorage.getItem("userName")}
             token={localStorage.getItem("userToken")}
             order={this.state.order}
+            userLoggedIn={this.props.userLoggedIn}
+            handleLogout={this.props.handleLogout}
           />
         );
       case 3:
@@ -125,6 +128,8 @@ export class OrdersForm extends Component {
             token={localStorage.getItem("userToken")}
             order={this.state.order}
             product={this.state.product}
+            userLoggedIn={this.props.userLoggedIn}
+            handleLogout={this.props.handleLogout}
           />
         );
       case 4:
@@ -134,6 +139,8 @@ export class OrdersForm extends Component {
             token={localStorage.getItem("userToken")}
             order={this.state.order}
             product={this.state.product}
+            userLoggedIn={this.props.userLoggedIn}
+            handleLogout={this.props.handleLogout}
           />
         );
     }

@@ -196,6 +196,7 @@ export class ProductsForm extends Component {
         handleSavetoCart={this.handleSavetoCart}
         handleAddtoCart={this.handleAddtoCart}
         userLoggedIn={this.props.userLoggedIn}
+        handleLogout={this.props.handleLogout}
       />
     );
   }

@@ -5,6 +5,7 @@ import Counters from "./pages/counters";
 import Counter from "./pages/counter";
 import ModelButton from "./pages/ModelButton";
 import StarRating from "./pages/StarRating";
+import UserButton from "./UserButton";
 
 class ProductsDetails extends Component {
   state = {

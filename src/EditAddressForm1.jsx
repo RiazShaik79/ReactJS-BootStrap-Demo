@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import AddressSuggest from "./AddressSuggest";
 import AddressInput from "./AddressInput";
 
-class AddressForm1 extends Component {
+class EditAddressForm1 extends Component {
   constructor(props) {
     super(props);
   }
@@ -34,7 +34,7 @@ class AddressForm1 extends Component {
       <div className="container-fluid">
         <div className="row">
           <div className="col-md-12 topbarContent">
-            <h1>This is User Registration Page</h1>
+            <h1>This is Edit User Details Page</h1>
           </div>
         </div>
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -84,7 +84,7 @@ class AddressForm1 extends Component {
           </div>
           <div className="col-md-8 ">
             <form className="form-group">
-              <h4 className="textColorBlack">Enter Address Details</h4>
+              <h4 className="textColorBlack">Edit Address Details</h4>
               <br />
               <div className="container textColorBlack">
                 <AddressSuggest
@@ -133,4 +133,4 @@ class AddressForm1 extends Component {
   }
 }
 
-export default AddressForm1;
+export default EditAddressForm1;
