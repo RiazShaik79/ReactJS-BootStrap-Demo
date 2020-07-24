@@ -14,14 +14,14 @@ class OrderDetails extends Component {
 
   render() {
     let orders = this.props.orders
-      .filter((c) => c.orderId > 100)
+      .filter((c) => c.id > 100)
       .map((order) => {
         return (
           <div className="col-md-10">
             <div className="card textColorBlack">
               <div className="card-header ">
                 <div className="row">
-                  <div className="col-md-2">Order #: {order.orderId}</div>
+                  <div className="col-md-2">Order #: {order.id}</div>
                   <div className="col-md-2">
                     Order Status: {order.orderStatus}
                   </div>
@@ -39,7 +39,7 @@ class OrderDetails extends Component {
               </div>
               <div className="card-body">
                 <ol>
-                  {order.topics.map((product) => (
+                  {order.products.map((product) => (
                     <div className="row">
                       <div className="col-md-3">
                         <li>{product.name}</li>

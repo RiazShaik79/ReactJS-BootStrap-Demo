@@ -18,7 +18,7 @@ class MyCartDetails extends Component {
   }
 
   render() {
-    let products = this.props.mycart.topics
+    let products = this.props.mycart.products
       .filter((c) => c.value > 0)
       .map((product) => {
         return (
@@ -57,7 +57,7 @@ class MyCartDetails extends Component {
             <br />
             <span className="glyphicon glyphicon-shopping-cart "></span>
             <span className="badge badge-pill">
-              {this.props.mycart.topics.filter((c) => c.value > 0).length}
+              {this.props.mycart.products.filter((c) => c.value > 0).length}
             </span>{" "}
             <br />
             <h6>

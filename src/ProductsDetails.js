@@ -36,7 +36,11 @@ class ProductsDetails extends Component {
               >
                 Add to Cart
               </button>{" "}
-              <ModelButton key={product.id} product={product} />
+              <ModelButton
+                key={product.id}
+                product={product}
+                disabled={!this.props.userLoggedIn}
+              />
               <StarRating
                 currentRating={product.rating}
                 numberOfStars="5"
@@ -68,7 +72,7 @@ class ProductsDetails extends Component {
             <br />
             <span className="glyphicon glyphicon-shopping-cart "></span>
             <span className="badge badge-pill">
-              {this.props.mycart.topics.filter((c) => c.value > 0).length}
+              {this.props.mycart.products.filter((c) => c.value > 0).length}
             </span>{" "}
             <br />
             <h6>

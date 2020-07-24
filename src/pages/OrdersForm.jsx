@@ -41,7 +41,7 @@ export class OrdersForm extends Component {
     };
 
     axios.get("http://localhost:8080/orders", config).then((response) => {
-      console.log("orders " + response.data);
+      console.log("orders " + JSON.stringify(response.data));
       this.setState({
         orders: response.data,
       });

@@ -15,7 +15,7 @@ export class ProductsForm extends Component {
     products: [],
     mycart: {
       username: "",
-      topics: [],
+      products: [],
     },
     step: 1,
     pageNo: 0,
@@ -45,7 +45,7 @@ export class ProductsForm extends Component {
     };
 
     axios
-      .get("http://localhost:8080/topics/" + this.state.pageNo + "/6/id")
+      .get("http://localhost:8080/products/" + this.state.pageNo + "/6/id")
       .then((response) => {
         this.setState({
           products: response.data,
@@ -66,6 +66,7 @@ export class ProductsForm extends Component {
       .post("http://localhost:8080/mycart/get", this.state.mycart, config)
       .then((response) => {
         this.setState({ mycart: response.data });
+        console.log("mycart " + response.data);
       });
   }
 
@@ -85,7 +86,9 @@ export class ProductsForm extends Component {
     };
 
     axios
-      .get("http://localhost:8080/topics/" + (this.state.pageNo - 1) + "/6/id")
+      .get(
+        "http://localhost:8080/products/" + (this.state.pageNo - 1) + "/6/id"
+      )
       .then((response) => {
         this.setState({
           products: response.data,
@@ -111,7 +114,9 @@ export class ProductsForm extends Component {
     };
 
     axios
-      .get("http://localhost:8080/topics/" + (this.state.pageNo + 1) + "/6/id")
+      .get(
+        "http://localhost:8080/products/" + (this.state.pageNo + 1) + "/6/id"
+      )
       .then((response) => {
         this.setState({
           products: response.data,
@@ -123,25 +128,25 @@ export class ProductsForm extends Component {
   };
 
   handleAddtoCart(product) {
-    const topics = [...this.state.mycart.topics];
-    console.log("topics length " + topics.length);
+    const products = [...this.state.mycart.products];
+    console.log("topics length " + products.length);
 
-    let topicExist = false;
+    let productExist = false;
     let i = 0;
-    for (i = 0; i < topics.length; i++) {
-      if (topics[i].name == product.name) {
-        topicExist = true;
-        topics[i].value++;
+    for (i = 0; i < products.length; i++) {
+      if (products[i].name == product.name) {
+        productExist = true;
+        products[i].value++;
       }
     }
 
-    if (!topicExist) {
+    if (!productExist) {
       product.value = 1;
-      topics.push(product);
+      products.push(product);
     }
 
     this.setState({
-      mycart: { username: localStorage.getItem("userName"), topics },
+      mycart: { username: localStorage.getItem("userName"), products },
     });
 
     /* let config = {

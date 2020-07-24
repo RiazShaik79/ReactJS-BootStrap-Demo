@@ -13,7 +13,7 @@ export class MyCartForm extends Component {
   state = {
     mycart: {
       username: "",
-      topics: [],
+      products: [],
     },
     step: 1,
   };
@@ -47,42 +47,42 @@ export class MyCartForm extends Component {
       .post("http://localhost:8080/mycart/get", this.state.mycart, config)
       .then((response) => {
         this.setState({ mycart: response.data });
-        console.log(this.state.mycart.topics);
+        console.log(this.state.mycart.products);
       });
   }
 
   handleReset = () => {
-    const topics = this.state.mycart.topics.map((c) => {
+    const products = this.state.mycart.products.map((c) => {
       c.value = 0;
       return c;
     });
     this.setState({
-      mycart: { username: localStorage.getItem("userName"), topics },
+      mycart: { username: localStorage.getItem("userName"), products },
     });
     this.handleSavetoCart();
   };
 
   handleIncrement = (product) => {
-    const topics = [...this.state.mycart.topics];
+    const products = [...this.state.mycart.products];
 
-    const index = topics.indexOf(product);
-    topics[index] = { ...product };
-    topics[index].value++;
+    const index = products.indexOf(product);
+    products[index] = { ...product };
+    products[index].value++;
     this.setState({
-      mycart: { username: localStorage.getItem("userName"), topics },
+      mycart: { username: localStorage.getItem("userName"), products },
     });
   };
 
   handleDecrement = (product) => {
-    const topics = [...this.state.mycart.topics];
-    const index = topics.indexOf(product);
-    topics[index] = { ...product };
-    topics[index].value--;
-    if (topics[index].value <= 0) {
-      topics[index].value = 0;
+    const products = [...this.state.mycart.products];
+    const index = products.indexOf(product);
+    products[index] = { ...product };
+    products[index].value--;
+    if (products[index].value <= 0) {
+      products[index].value = 0;
     }
     this.setState({
-      mycart: { username: localStorage.getItem("userName"), topics },
+      mycart: { username: localStorage.getItem("userName"), products },
     });
   };
 
@@ -142,7 +142,7 @@ export class MyCartForm extends Component {
             token={localStorage.getItem("userToken")}
             nextStep={this.nextStep}
             prevStep={this.prevStep}
-            products={this.state.mycart.topics}
+            products={this.state.mycart.products}
             handleIncrement={this.handleIncrement}
             handleDecrement={this.handleDecrement}
             handleReset={this.handleReset}

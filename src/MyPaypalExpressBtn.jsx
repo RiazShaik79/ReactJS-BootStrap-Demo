@@ -6,22 +6,27 @@ import { PayPalButton } from "react-paypal-button-v2";
 export default class MyPaypalExpressBtn extends React.Component {
   state = {
     order: {
-      orderId: "",
-      topics: [],
+      products: [],
       totalAmount: 0,
-      paymentOrderId: "",
+      paymentId: "",
     },
   };
   constructor(props) {
     super(props);
     this.createOrder = this.createOrder.bind(this);
+    //this.state.order.products = this.props.products;
+    //this.state.order.totalAmount = this.props.totalAmount;
   }
 
-  createOrder() {
-    this.setState({ totalAmount: this.props.totalAmount });
-    this.setState({ topics: this.props.products });
+  createOrder(payment) {
+    this.setState({
+      order: {
+        products: this.props.products,
+        totalAmount: this.props.totalAmount,
+        paymentId: payment.paymentID,
+      },
+    });
 
-    console.log("topics " + this.props.products);
     let config = {
       headers: {
         "Content-Type": "application/json",
@@ -30,7 +35,7 @@ export default class MyPaypalExpressBtn extends React.Component {
     };
 
     axios
-      .post("http://localhost:8080/orders", this.state, config)
+      .post("http://localhost:8080/orders", this.state.order, config)
       .then((response) => {
         console.log(response.data);
         this.props.nextStep();
@@ -53,7 +58,8 @@ export default class MyPaypalExpressBtn extends React.Component {
     };
     const onSuccess = (payment) => {
       console.log("Your payment was succeeded!", payment);
-      this.createOrder();
+
+      this.createOrder(payment);
     };
 
     const onCancel = (data) => {

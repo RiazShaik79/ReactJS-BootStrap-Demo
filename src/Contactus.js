@@ -43,7 +43,7 @@ class Contactus extends Component {
     console.log("Im from Contatus post");
     console.log(this.state);
     axios
-      .post("http://localhost:8080/contactus", this.state)
+      .post("http://localhost:8080/contacts", this.state)
       .then((response) => {
         console.log("Response : " + response.data);
       })

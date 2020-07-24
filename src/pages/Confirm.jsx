@@ -20,7 +20,7 @@ export class Confrim extends Component {
       .then((response) => {
         console.log(response.data);
       });
-    this.props.nextStep();
+    //this.props.nextStep();
   };
 
   back = (e) => {
